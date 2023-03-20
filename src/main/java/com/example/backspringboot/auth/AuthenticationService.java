@@ -1,6 +1,7 @@
 package com.example.backspringboot.auth;
 
 import com.example.backspringboot.config.JwtService;
+import com.example.backspringboot.model.ImageData;
 import com.example.backspringboot.user.Role;
 import com.example.backspringboot.user.User;
 import com.example.backspringboot.user.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -33,6 +35,18 @@ public class AuthenticationService {
                 .score(0.0)
                 .score_hidden(false)
                 .bith_date(new SimpleDateFormat("dd/MM/yyyy").parse(request.getBirth_date()))
+                .profilePicture(
+                        ImageData.builder()
+                                .name("default_profile_picture.png")
+                                .type("image/png")
+                                .uri(File.separator + "static" + File.separator + "images" + File.separator + "default_profile_picture.png")
+                                .path(
+                                        System.getProperty("user.dir") + File.separator + "src" + File.separator +
+                                        "main" + File.separator + "resources" + File.separator + "static" + File.separator +
+                                        "images" + File.separator + "default_profile_picture.png"
+                                )
+                                .build()
+                )
                 .build();
 
         repository.save(user);

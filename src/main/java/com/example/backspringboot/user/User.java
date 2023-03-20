@@ -1,8 +1,10 @@
 package com.example.backspringboot.user;
 
+import com.example.backspringboot.model.ImageData;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,6 +47,10 @@ public class User implements UserDetails {
     @Column(nullable = false)
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date bith_date;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_data_id", referencedColumnName = "id")
+    private ImageData profilePicture;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

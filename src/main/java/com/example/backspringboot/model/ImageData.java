@@ -18,6 +18,7 @@ public class ImageData {
     private Long id;
     private String name;
     private String type;
+    private String uri;
     @JsonIgnore
     private String path;
 }

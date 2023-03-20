@@ -3,11 +3,13 @@ package com.example.backspringboot.service;
 import com.example.backspringboot.model.ImageData;
 import com.example.backspringboot.repository.ImageDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,7 +21,9 @@ public class ImageDataService {
     private final String FOLDER_PATH = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" +
             File.separator + "resources" + File.separator + "static" + File.separator + "images" + File.separator;
 
-    public void uploadImage(MultipartFile file) throws IOException {
+    private final String URI_PATH = File.separator + "static" + File.separator + "images" + File.separator;
+
+    public ImageData uploadImage(MultipartFile file) throws IOException {
         StringBuilder filename = new StringBuilder(Objects.requireNonNull(file.getOriginalFilename()).replaceAll(" ", "_"));
         String filePath = FOLDER_PATH + filename;
         File tempFile = new File(filePath);
@@ -29,16 +33,18 @@ public class ImageDataService {
             tempFile = new File(filePath);
         }
 
-
         ImageData imageData = ImageData.builder()
                 .name(filename.toString())
                 .type(file.getContentType())
+                .uri(URI_PATH + filename)
                 .path(filePath)
                 .build();
 
         repository.save(imageData);
 
         file.transferTo(new File(filePath));
+
+        return imageData;
     }
 
     public void deleteImage(Long id) {

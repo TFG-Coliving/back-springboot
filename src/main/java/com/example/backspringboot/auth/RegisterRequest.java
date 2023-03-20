@@ -1,5 +1,6 @@
 package com.example.backspringboot.auth;
 
+import com.example.backspringboot.model.ImageData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
