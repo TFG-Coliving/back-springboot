@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -18,7 +19,7 @@ public class ImageDataService {
 
     @Autowired
     private ImageDataRepository repository;
-    private final String FOLDER_PATH = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" +
+    private final String FOLDER_PATH = File.separator + "src" + File.separator + "main" +
             File.separator + "resources" + File.separator + "static" + File.separator + "images" + File.separator;
 
     private final String URI_PATH = File.separator + "static" + File.separator + "images" + File.separator;
@@ -39,6 +40,33 @@ public class ImageDataService {
                 .uri(URI_PATH + filename)
                 .path(filePath)
                 .build();
+
+        repository.save(imageData);
+
+        file.transferTo(new File(filePath));
+
+        return imageData;
+    }
+
+    public ImageData updateImage(MultipartFile file, ImageData imageData) throws IOException {
+        StringBuilder filename = new StringBuilder(Objects.requireNonNull(file.getOriginalFilename()).replaceAll(" ", "_"));
+        String filePath = FOLDER_PATH + filename;
+        File tempFile = new File(filePath);
+        while (tempFile.exists()) {
+            filename.insert(0, "1");
+            filePath = FOLDER_PATH + filename;
+            tempFile = new File(filePath);
+        }
+
+        if(!imageData.getName().equals("default_profile_picture")) {
+            File image = new File(imageData.getPath());
+            image.delete();
+        }
+
+        imageData.setName(filename.toString());
+        imageData.setPath(filePath);
+        imageData.setType(file.getContentType());
+        imageData.setUri(URI_PATH + filename);
 
         repository.save(imageData);
 

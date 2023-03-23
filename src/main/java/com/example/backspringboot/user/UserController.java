@@ -55,10 +55,11 @@ public class UserController {
     @PutMapping("/image")
     public ResponseEntity<ImageData> changeImage(@RequestParam("image")MultipartFile file) {
         try {
-            ImageData imageData = imageService.uploadImage(file);
             User user = userService.getCurrentUser();
-            user.setProfilePicture(imageData);
-            return ResponseEntity.ok().build();
+            ImageData image = user.getProfilePicture();
+            ImageData newImage = imageService.updateImage(file, image);
+
+            return ResponseEntity.ok(newImage);
         } catch (IOException ignore) {
             return ResponseEntity.badRequest().build();
         }
