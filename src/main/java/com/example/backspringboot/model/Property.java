@@ -42,8 +42,8 @@ public class Property {
     private int available_rooms;
     @Column(nullable = false)
     private String dimensions;
-    @OneToMany
-    @JoinColumn(name = "facility_id", nullable = false)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "facility_id")
     private Collection<Facility> facilities;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "room_id", nullable = false)
@@ -51,4 +51,8 @@ public class Property {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "rent_reviews_id")
     private Collection<Rent_review> rentReviews;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_data_id")
+    private Collection<ImageData> images;
 }
