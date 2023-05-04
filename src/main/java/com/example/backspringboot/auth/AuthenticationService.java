@@ -25,6 +25,11 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) throws ParseException {
+        System.out.println(request.getFirstname());
+        System.out.println(request.getLastname());
+        System.out.println(request.getEmail());
+        System.out.println(request.getPassword());
+        System.out.println(request.getPhone());
         User user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -34,7 +39,7 @@ public class AuthenticationService {
                 .phone(request.getPhone())
                 .score(0.0)
                 .score_hidden(false)
-                .bith_date(new SimpleDateFormat("dd/MM/yyyy").parse(request.getBirth_date()))
+                //.bith_date(new SimpleDateFormat("dd/MM/yyyy").parse(request.getBirth_date()))
                 .profilePicture(
                         ImageData.builder()
                                 .name("default_profile_picture.png")
@@ -57,6 +62,8 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        System.out.println(request.getEmail());
+        System.out.println(request.getPassword());
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 request.getEmail(),

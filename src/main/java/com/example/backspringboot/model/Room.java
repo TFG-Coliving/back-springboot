@@ -27,7 +27,7 @@ public class Room {
     private String dimensions;
     @Column(nullable = false)
     private int capacity;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")
     private Collection<Bid> bids;
 }

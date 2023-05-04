@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
@@ -42,17 +44,21 @@ public class Property {
     private int available_rooms;
     @Column(nullable = false)
     private String dimensions;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "facility_id")
     private Collection<Facility> facilities;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", nullable = false)
     private Collection<Room> rooms;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "rent_reviews_id")
     private Collection<Rent_review> rentReviews;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "image_data_id")
     private Collection<ImageData> images;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "favorites")
+    private Set<User> users = new HashSet<>();
 }

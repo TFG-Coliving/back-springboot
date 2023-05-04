@@ -1,18 +1,16 @@
 package com.example.backspringboot.user;
 
 import com.example.backspringboot.model.ImageData;
+import com.example.backspringboot.model.Property;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Builder
@@ -44,13 +42,21 @@ public class User implements UserDetails {
     private double score;
     @Column(nullable = false)
     private boolean score_hidden;
-    @Column(nullable = false)
+    @Column
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date bith_date;
+    private Date birth_date;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_data_id", referencedColumnName = "id")
     private ImageData profilePicture;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_property",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "property_id")
+    )
+    private Set<Property> favorites = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
